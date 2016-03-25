@@ -27,6 +27,10 @@ class EqualityTest extends haxe.unit.TestCase {
                  ['SPAIN','BARCELONA']];
     }
 
+    public function testFloatingPoints(){
+        assertEquals(1,0);
+    }
+
     public function testWhiteSpace(){
         var table1 = Native.table(data1);
         var table2 = Native.table(data2);

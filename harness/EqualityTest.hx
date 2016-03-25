@@ -7,6 +7,8 @@ class EqualityTest extends haxe.unit.TestCase {
     var data2 : Array<Array<Dynamic>>;
     var data3 : Array<Array<Dynamic>>;
     var data4 : Array<Array<Dynamic>>;
+    var fp_data : Array<Array<Dynamic>>;
+    var fp_data_1pc : Array<Array<Dynamic>>;
 
     override public function setup() {
         data1 = [['Country','Capital'],
@@ -25,10 +27,22 @@ class EqualityTest extends haxe.unit.TestCase {
                  ['IRELAND','DUBlin'],
                  ['France',15],
                  ['SPAIN','BARCELONA']];
+        fp_data =     [['Time',    'Steps','Avg',   'Speed',   'I/O time'],
+                       ['82.456',  '149',  '0.553', '130.106', '18.391']];
+        fp_data_1pc = [['Time',    'Steps','Avg',   'Speed',   'I/O time'],
+                       ['82.282',  '149',  '0.553', '130.2',   '18.317']];
     }
 
     public function testFloatingPoints(){
-        assertEquals(1,0);
+        var table1 = Native.table(fp_data);
+        var table2 = Native.table(fp_data_1pc);
+        var flags = new coopy.CompareFlags();
+        flags.unchanged_context = 0;
+        var o = coopy.Coopy.diff(table1,table2,flags);
+        assertEquals(2,o.height);
+        flags.fp_threshold = 0.01;
+        o = coopy.Coopy.diff(table1,table2,flags);
+        assertEquals(1,o.height);
     }
 
     public function testWhiteSpace(){

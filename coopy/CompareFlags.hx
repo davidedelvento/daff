@@ -195,6 +195,17 @@ class CompareFlags {
      */
     public var ignore_whitespace : Bool;
 
+
+    /**
+     *
+     * If negative, everything should be considered as string. If positive
+     * relative threshold below which two floating points should be considered
+     * equal: if (fp1 - fp2 ) / ((fp1 + fp2)/2) < threshold they will be
+     * considered equal. Defaults to -1
+     *
+     */
+    public var fp_threshold : Float;
+
     /**
      *
      * Should case be omitted from comparisons.  Defaults to false.
@@ -232,6 +243,7 @@ class CompareFlags {
         parent = null;
         count_like_a_spreadsheet = true;
         ignore_whitespace = false;
+        fp_threshold = -1.0;
         ignore_case = false;
         terminal_format = null;
     }

@@ -12,7 +12,7 @@ js:
 	mkdir -p lib
 	@echo "#######################################################"
 	@echo "## Generate javascript"
-	haxe language/js.hxml # produces lib/daff.js
+	haxe -lib polygonal-printf language/js.hxml # produces lib/daff.js
 	@echo "#######################################################"
 	@echo "## Make library version"
 	cat env/js/fix_exports.js >> lib/daff.js
@@ -221,7 +221,7 @@ clean:
 ntest: ntest_js ntest_rb ntest_py ntest_php ntest_java
 
 ntest_js: js
-	haxe -js ntest.js -D haxeJSON -main harness.Main
+	haxe -lib polygonal-printf -js ntest.js -D haxeJSON -main harness.Main
 	NODE_PATH=$$PWD/lib node ntest.js
 
 py_test_files=$(wildcard test/*.py)

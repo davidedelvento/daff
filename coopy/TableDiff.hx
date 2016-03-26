@@ -3,6 +3,7 @@
 #if !TOPLEVEL
 package coopy;
 #end
+import de.polygonal.Printf;
 
 /**
  *
@@ -648,7 +649,7 @@ class TableDiff {
 
     private function normalizeString(v: View, str: Dynamic) : String {
         if (str==null) return str;
-        if (!(flags.ignore_whitespace||flags.ignore_case)) {
+        if (!(flags.ignore_whitespace||flags.ignore_case)&&(flags.fp_threshold<0)) {
             return str;
         }
         var txt = v.toString(str);
@@ -658,11 +659,17 @@ class TableDiff {
         if (flags.ignore_case) {
             txt = txt.toLowerCase();
         }
+        if (!(flags.fp_threshold<0)) {
+            var txt_as_float = Std.parseFloat(txt);
+            if (!Math.isNaN(txt_as_float)) {
+                txt = Printf.format("%f", [txt_as_float]);
+            }
+        }
         return txt;
     }
 
     private function isEqual(v: View, aa: Dynamic, bb: Dynamic) : Bool {
-        if (flags.ignore_whitespace || flags.ignore_case) {
+        if (flags.ignore_whitespace || flags.ignore_case || !(flags.fp_threshold<0)) {
             return normalizeString(v,aa) == normalizeString(v,bb);
         }
         return v.equals(aa,bb);

@@ -10,6 +10,8 @@ class EqualityTest extends haxe.unit.TestCase {
     var fp_data : Array<Array<Dynamic>>;
     var fp_data_1pc : Array<Array<Dynamic>>;
     var fp_data_exp : Array<Array<Dynamic>>;
+    var fp_data_edge1 : Array<Array<Dynamic>>;
+    var fp_data_edge2 : Array<Array<Dynamic>>;
 
     override public function setup() {
         data1 = [['Country','Capital'],
@@ -34,6 +36,25 @@ class EqualityTest extends haxe.unit.TestCase {
                        ['82.282',  '149',  '0.553', '130.2',   '18.317']];
         fp_data_exp = [['Time',    'Steps','Avg',   'Speed',   'I/O time'],
                        ['8.245600e+01',  '149',  '5.530000e-01', '1.301060e+02', '1.839100e+01']];
+        fp_data_edge1 = [['Time',    'Steps','Avg',   'Speed',   'I/O time'],
+                         ['0.0',     '0',    '2.00',  '130.106', '18.39']];
+        fp_data_edge2 = [['Time',    'Steps','Avg',   'Speed',   'I/O time'],
+                         ['0.0',     '0',    '2.01',  '131.106', '18.31']];
+    }
+
+    public function testFloatingPoints_edge_cases(){
+        var table1 = Native.table(fp_data_edge1);
+        var table2 = Native.table(fp_data_edge2);
+        var flags = new coopy.CompareFlags();
+        flags.unchanged_context = 0;
+        var o = coopy.Coopy.diff(table1,table2,flags);
+        assertEquals(2,o.height);
+        flags.fp_threshold = 0.0;
+        var o = coopy.Coopy.diff(table1,table2,flags);
+        assertEquals(2,o.height);
+        flags.fp_threshold = 0.01;
+        var o = coopy.Coopy.diff(table1,table2,flags);
+        assertEquals(1,o.height);
     }
 
     public function testFloatingPoints_exp(){

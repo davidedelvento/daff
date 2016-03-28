@@ -669,8 +669,17 @@ class TableDiff {
     }
 
     private function isEqual(v: View, aa: Dynamic, bb: Dynamic) : Bool {
-        if (flags.ignore_whitespace || flags.ignore_case || !(flags.fp_threshold<0)) {
+        if (flags.ignore_whitespace || flags.ignore_case || (flags.fp_threshold==0)) {
             return normalizeString(v,aa) == normalizeString(v,bb);
+        }
+        if (flags.fp_threshold>0) {
+            var aa_as_float = Std.parseFloat(aa);
+            var bb_as_float = Std.parseFloat(bb);
+            if (!Math.isNaN(aa_as_float) && !Math.isNaN(bb_as_float) ) {
+                return true;
+            } else if (flags.ignore_whitespace || flags.ignore_case ) {
+                return normalizeString(v,aa) == normalizeString(v,bb);
+            }
         }
         return v.equals(aa,bb);
     }

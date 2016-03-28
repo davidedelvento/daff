@@ -678,7 +678,7 @@ class TableDiff {
             if (!Math.isNaN(aa_fl) && !Math.isNaN(bb_fl) ) {
                 //  d = (aa - bb) / ((aa + bb)/2)    # but avoid the divide-by-zero risk
                 //  if d <= t they are consider equal
-                if (2*(aa_fl - bb_fl) < flags.fp_threshold*(aa_fl + bb_fl)) {
+                if (2*(aa_fl - bb_fl) <= flags.fp_threshold*(aa_fl + bb_fl)) {
                     return true;
                 } else {
                     return false;

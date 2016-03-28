@@ -673,10 +673,16 @@ class TableDiff {
             return normalizeString(v,aa) == normalizeString(v,bb);
         }
         if (flags.fp_threshold>0) {
-            var aa_as_float = Std.parseFloat(aa);
-            var bb_as_float = Std.parseFloat(bb);
-            if (!Math.isNaN(aa_as_float) && !Math.isNaN(bb_as_float) ) {
-                return true;
+            var aa_fl = Std.parseFloat(aa);
+            var bb_fl = Std.parseFloat(bb);
+            if (!Math.isNaN(aa_fl) && !Math.isNaN(bb_fl) ) {
+                //  d = (aa - bb) / ((aa + bb)/2)    # but avoid the divide-by-zero risk
+                //  if d <= t they are consider equal
+                if (2*(aa_fl - bb_fl) < flags.fp_threshold*(aa_fl + bb_fl)) {
+                    return true;
+                } else {
+                    return false;
+                }
             } else if (flags.ignore_whitespace || flags.ignore_case ) {
                 return normalizeString(v,aa) == normalizeString(v,bb);
             }

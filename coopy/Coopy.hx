@@ -761,6 +761,17 @@ class Coopy {
                     if (context>=0) flags.unchanged_context = context;
                     args.splice(i,2);
                     break;
+                } else if (tag=="-t" || tag=="--floating-point-threshold") {
+                    more = true;
+                    var threshold : Float = Std.parseFloat(args[i+1]);
+                    if (Math.isNaN(threshold)) {
+                        io.writeStderr("Floating point threshold must be an integer, gotten " + args[i+1]  + "\n");
+                        return 1;
+                    } else {
+                        flags.fp_threshold = threshold;
+                    }
+                    args.splice(i,2);
+                    break;
                 } else if (tag=="--inplace") {
                     more = true;
                     inplace = true;
@@ -920,6 +931,7 @@ class Coopy {
             io.writeStderr("     --padding [dense|sparse|smart]: set padding method for aligning columns\n");
             io.writeStderr("     --table NAME:  compare the named table, used with SQL sources\n");
             io.writeStderr("     --unordered:   assume row order is meaningless (default for json formats)\n");
+            io.writeStderr("     -t T / --floating-point-threshold T: consider equal two numbers with a relative difference less or equal than T\n");
             io.writeStderr("     -w / --ignore-whitespace: ignore changes in leading/trailing whitespace\n");
             io.writeStderr("     -i / --ignore-case: ignore differences in case\n");
             io.writeStderr("\n");

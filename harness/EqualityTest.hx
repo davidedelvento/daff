@@ -58,6 +58,9 @@ class EqualityTest extends haxe.unit.TestCase {
         flags.fp_threshold = 0.01;
         o = coopy.Coopy.diff(table1,table2,flags);
         assertEquals(1,o.height);
+        flags.fp_threshold = 0.0001;
+        o = coopy.Coopy.diff(table1,table2,flags);
+        assertEquals(2,o.height);
     }
 
     public function testWhiteSpace(){
